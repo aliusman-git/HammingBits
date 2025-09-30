@@ -1,43 +1,61 @@
-public class HammAll {
+public class HammingCode {
     public static void main(String[] args) {
-        int [] inp ={1,1,0,0,0,0,1,1,1,0,0,1};
-        int [] msg ={2,9,9,1,9,1,0,0,9,0,0,1,1,1,0,0,9,1};
-        String ParityScheme = "ODD";   // use "ODD" or "EVEN"
+        int [] inp = {1,1,0,0,0,0,1,1,1,0,0,1};
+        int [] msg = {2,9,9,1,9,1,0,0,9,0,0,1,1,1,0,0,9,1};
+        String ParityScheme = "ODD";   // choose "ODD" or "EVEN"
+
         int msglength = msg.length;
 
-        int sum1=0, sum2=0, sum3=0;
-        int hammingbit1=0, hammingbit2=0, hammingbit3=0;
-
-        //  h1
-        for(int i=3; i<msglength; i+=2){
-            if(msg[i] != 9) sum1 = sum1 + msg[i];
+        //  H1 calculation 
+        int sum1 = 0, hammingbit1 = 0;
+        for(int i=3; i<msglength; i+=2){   // every 2nd bit starting from 3
+            sum1 = sum1 + msg[i];
         }
-
-        //  h2
-        for(int i=2; i<msglength; i+=4){
-            if(msg[i] != 9) sum2 = sum2 + msg[i];
-            if(i+1 < msglength && msg[i+1] != 9) sum2 = sum2 + msg[i+1];
-        }
-
-        //  h3
-        for(int i=4; i<msglength; i+=8){
-            if(msg[i] != 9) sum3 = sum3 + msg[i];
-            if(i+1 < msglength && msg[i+1] != 9) sum3 = sum3 + msg[i+1];
-            if(i+2 < msglength && msg[i+2] != 9) sum3 = sum3 + msg[i+2];
-            if(i+3 < msglength && msg[i+3] != 9) sum3 = sum3 + msg[i+3];
-        }
-
-        //  Apply odd parity rule
         if(ParityScheme.equals("ODD")){
-            hammingbit1 = (sum1 % 2 == 0) ? 1 : 0;
-            hammingbit2 = (sum2 % 2 == 0) ? 1 : 0;
-            hammingbit3 = (sum3 % 2 == 0) ? 1 : 0;
+            int r = sum1 % 2;
+            if(r != 0){
+                hammingbit1 = 0;
+            } else {
+                hammingbit1 = 1;
+            }
         }
 
-        // Print results
-        System.out.println("Length: " + msglength);
-        System.out.println("sum1 = " + sum1 + " → hammingbit1 = " + hammingbit1);
-        System.out.println("sum2 = " + sum2 + " → hammingbit2 = " + hammingbit2);
-        System.out.println("sum3 = " + sum3 + " → hammingbit3 = " + hammingbit3);
+        //  H2 calculation 
+        int sum2 = 0, hammingbit2 = 0;
+        for(int i=3; i<msglength; i+=4){   // take 2, skip 2
+            sum2 = sum2 + msg[i];
+            if(i+1 < msglength) sum2 = sum2 + msg[i+1];
+        }
+        if(ParityScheme.equals("ODD")){
+            int r = sum2 % 2;
+            if(r != 0){
+                hammingbit2 = 0;
+            } else {
+                hammingbit2 = 1;
+            }
+        }
+
+        //  H3 calculation 
+        int sum3 = 0, hammingbit3 = 0;
+        for(int i=3; i<msglength; i+=8){   // take 4, skip 4
+            sum3 = sum3 + msg[i];
+            if(i+1 < msglength) sum3 = sum3 + msg[i+1];
+            if(i+2 < msglength) sum3 = sum3 + msg[i+2];
+            if(i+3 < msglength) sum3 = sum3 + msg[i+3];
+        }
+        if(ParityScheme.equals("ODD")){
+            int r = sum3 % 2;
+            if(r != 0){
+                hammingbit3 = 0;
+            } else {
+                hammingbit3 = 1;
+            }
+        }
+
+        // print result
+        System.out.println("Message length: " + msglength);
+        System.out.println("Sum1: " + sum1 + "  H1: " + hammingbit1);
+        System.out.println("Sum2: " + sum2 + "  H2: " + hammingbit2);
+        System.out.println("Sum3: " + sum3 + "  H3: " + hammingbit3);
     }
 }
