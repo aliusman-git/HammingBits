@@ -1,43 +1,40 @@
-public class Hamm {
+public class HammAll {
     public static void main(String[] args) {
         int [] inp ={1,1,0,0,0,0,1,1,1,0,0,1};
         int [] msg ={2,9,9,1,9,1,0,0,9,0,0,1,1,1,0,0,9,1};
-        String Parsch = "ODD";
+        String ParityScheme = "ODD";   // use "ODD" or "EVEN"
         int msglength = msg.length;
 
         int sum1=0, sum2=0, sum3=0;
         int hammingbit1=0, hammingbit2=0, hammingbit3=0;
 
-        //  h1: add bits at positions 3,5,7,9,11,13,15... 
+        //  h1
         for(int i=3; i<msglength; i+=2){
-            if(msg[i] != 9)  // skip placeholder
-                sum1 = sum1 + msg[i];
+            if(msg[i] != 9) sum1 = sum1 + msg[i];
         }
 
-        // h2: add bits at positions 3,6,7,10,11,14,15...
-        for(int i=2; i<msglength; i+=4){ // groups of 2-on, 2-off
-            for(int j=i; j<i+2 && j<msglength; j++){
-                if(msg[j] != 9)
-                    sum2 = sum2 + msg[j];
-            }
+        //  h2
+        for(int i=2; i<msglength; i+=4){
+            if(msg[i] != 9) sum2 = sum2 + msg[i];
+            if(i+1 < msglength && msg[i+1] != 9) sum2 = sum2 + msg[i+1];
         }
 
-        //  h3: add bits at positions 5,6,7,12,13,14,15...
-        for(int i=4; i<msglength; i+=8){ // groups of 4-on, 4-off
-            for(int j=i; j<i+4 && j<msglength; j++){
-                if(msg[j] != 9)
-                    sum3 = sum3 + msg[j];
-            }
+        //  h3
+        for(int i=4; i<msglength; i+=8){
+            if(msg[i] != 9) sum3 = sum3 + msg[i];
+            if(i+1 < msglength && msg[i+1] != 9) sum3 = sum3 + msg[i+1];
+            if(i+2 < msglength && msg[i+2] != 9) sum3 = sum3 + msg[i+2];
+            if(i+3 < msglength && msg[i+3] != 9) sum3 = sum3 + msg[i+3];
         }
 
         //  Apply odd parity rule
-        if(Parsch.equals("ODD")){
+        if(ParityScheme.equals("ODD")){
             hammingbit1 = (sum1 % 2 == 0) ? 1 : 0;
             hammingbit2 = (sum2 % 2 == 0) ? 1 : 0;
             hammingbit3 = (sum3 % 2 == 0) ? 1 : 0;
         }
 
-        //  Print results
+        // Print results
         System.out.println("Length: " + msglength);
         System.out.println("sum1 = " + sum1 + " → hammingbit1 = " + hammingbit1);
         System.out.println("sum2 = " + sum2 + " → hammingbit2 = " + hammingbit2);
